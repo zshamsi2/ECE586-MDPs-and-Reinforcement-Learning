@@ -60,36 +60,40 @@ class walkerSimulation:
                 
                 try:
                         k = self.Q[i,u]['k']
-                        epsilon_k = 1 # ?!
-                        
-                        # minimization over v
-                        iu = np.array(list(self.Q.keys()))
-                        indexes = np.where(iu==j)
-                        jus = []
-                        firstFlag = True
-                        for ii in range(len(indexes[0])):
-                                if indexes[1][ii]==0:  # if i is equal to j, not u
-                                        i_index = indexes[0][ii] # first index of indexes
-                                        iu_z = iu[i_index]
-                                        #jus.append(iu[i_index])
-                                        Q_val = self.Q[iu_z[0], iu_z[1]]['Q']
-                                        if firstFlag:
+                        Q_old = self.Q[i,u]
+                except:
+                        k = 0
+                        Q_old = 0
+                epsilon_k = 90./(100+k)
+                
+                ###################### minimization over v
+                iu = np.array(list(self.Q.keys()))
+                indexes = np.where(iu==j)
+                jus = []
+                firstFlag = True
+                for ii in range(len(indexes[0])):
+                        if indexes[1][ii]==0:  # if i is equal to j, not u
+                                i_index = indexes[0][ii] # first index of indexes
+                                iu_z = iu[i_index]
+                                #jus.append(iu[i_index])
+                                Q_val = self.Q[iu_z[0], iu_z[1]]['Q']
+                                if firstFlag:
+                                        Q_min = Q_val
+                                        firstFlag=Fales
+                                 else:
+                                        if Q_val<Q_min:
                                                 Q_min = Q_val
-                                                firstFlag=Fales
-                                        else:
-                                                if Q_val<Q_min:
-                                                      Q_min = Q_val  
-                        
-                        
-                        
-                        Q_new 
-                        
-                        
-                        self.Q[i,u] ={'k':k+1, 'Q':Q_new}
-                 except:
-                        Q_new = 
-                        self.Q[i,u] ={'k':1, 'Q':Q_new}
-                return W
+                if firstFlag:
+                        Q_min=0
+                ############################################
+                c = self.cost(i,u)
+                Q_new = (1-epsilon)*Q_old+epsilon*(c+alpha*Q_min)
+                self.Q[i,u] ={'k':k+1, 'Q':Q_new}
+                 
+                Q_old = 0
+                Q_new = (1-epsilon)*Q_old+epsilon*(c+alpha*Q_min)
+                self.Q[i,u] ={'k':1, 'Q':Q_new}
+                return 
                 
         def findStarting(self, trj_Sp_theta, trj_Sp, W_1, starting_n=10 , method = 'RL'):
                 return newPoints
