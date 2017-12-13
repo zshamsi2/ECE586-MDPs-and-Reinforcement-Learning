@@ -1,4 +1,5 @@
-class mockSimulation:
+# Random Walker Simulation Environment
+class walkerSimulation:
 
         ## public
         def __init__(self):
