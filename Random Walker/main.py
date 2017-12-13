@@ -16,7 +16,7 @@ for round in range(700):
 	u = my_sim.findU(i, method = 'QL')
 	newPoints = my_sim.findStarting(trjs, u, method = 'QL')
 
-	trj1 = my_sim.run(newPoints, nstepmax = l)
+	trj1 = my_sim.run(newPoints, nstepmax = l) # trj with shape of [[Xs][Ys]]
 	com_trjs = []
 	for theta in range(len(trj1)):
 		com_trjs.append(np.concatenate((trjs[theta], trj1[theta]))) #check dim
@@ -31,7 +31,7 @@ for round in range(700):
 	my_sim.updateQ(i, j, u, cost) # important
 	i = j
 	
-	if finalState:
+	if my_sim.isFinal(com_trjs):
 		halt
 		
 np.save('trjs', trjs)
