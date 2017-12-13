@@ -8,54 +8,28 @@ class walkerSimulation:
                 self.s = 1# length of simulations
                 self.N = 1# number of parallel simulations
 
-        def run_multipleSim(self):
-                return True
-        def runNxtRound(self):
-                return True
-        
         ## private
-        def PreAll(self, trj):
-                """
-                Pre-Sampling:
-                        choose states with minimum counts or newly discovered states
-                        
-                output:
-                        trj with shape of [[Xs][Ys]]
-                """
-                import numpy as np
-                comb_trj = []
-                for theta in range(len(trj)):
-                        comb_trj.append(np.concatenate(np.concatenate(trj[theta])))
-                trj_Sp = np.array(comb_trj) # pick all
-                
-                return trj_Sp
-
-
-        def PreSamp(self, trj, starting_n=10, myn_clusters = 40, N = 2):
-                """
-                Pre-Sampling:
-                        choose states with minimum counts or newly discovered states
-                        
-                output:
-                        trj with shape of [[Xs][Ys]]
-                """
-                return trj_Sp
-                
-        def map(self, trj_Sp):
+             
+        def updateState(self, trj_Sp): ## Need Change
                 # map coordinate space to reaction coorinates space
-                trj_Sp_theta = trj_Sp
+                import numpy as np
+                np.hist2d(trj_Sp)
                 return trj_Sp_theta
+        def isFinal(trjs):
+                import numpy as np
+                if np.any(trjs[1]>1.5):
+                        return True
+                return False
 
-        def cost(self, i, j):
+        def cost(self, i, j): # change
                 if i==j:
                         cost = 0
-
-                return r_s
-
+                else:
+                        cost = -1 
+                return cost
 
         def updateQ(self, i, j, u, cost):
                 # Q format is: (i,u)=(Q_value, k)
-                
                 try:
                         k = self.Q[i,u]['k']
                         Q_old = self.Q[i,u]
