@@ -10,10 +10,50 @@ class walkerSimulation:
 
         ## private
              
-        def updateState(self, trj_Sp): ## Need Change
+        def updateState(self, trj): ## Need Change
                 # map coordinate space to reaction coorinates space
                 import numpy as np
-                np.hist2d(trj_Sp)
+                for i in range(trj[0]):
+                        x = trj[0][i]
+                        y = trj[1][i]
+                        if x>1.5:
+                                if y<0.5:
+                                        s.append(1)
+                                elif y<1:
+                                        s.append(5)
+                                elif y<1.5:
+                                        s.append(9)                                        
+                                else:
+                                        s.append(13)
+                        elif x>1:
+                                if y<0.5:
+                                        s.append(2)
+                                elif y<1:
+                                        s.append(6)
+                                elif y<1.5:
+                                        s.append(10)                                        
+                                else:
+                                        s.append(14) 
+                        elif x>0.5:
+                                if y<0.5:
+                                        s.append(3)
+                                elif y<1:
+                                        s.append(7)
+                                elif y<1.5:
+                                        s.append(10)                                        
+                                else:
+                                        s.append(15)
+                        else:
+                                if y<0.5:
+                                        s.append(4)
+                                elif y<1:
+                                        s.append(8)
+                                elif y<1.5:
+                                        s.append(11)                                        
+                                else:
+                                        s.append(16)                
+                                        
+                        
                 return trj_Sp_theta
         def isFinal(trjs):
                 import numpy as np
