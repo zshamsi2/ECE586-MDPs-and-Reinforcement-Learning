@@ -10,11 +10,10 @@ l = 10
 my_sim = sim.walkerSimulation()
 
 # first round
-trj1 = my_sim.run_noPlt([X_0, Y_0], nstepmax = l)
-trj1 = my_sim.PreAll(trj1)
+trj1 = my_sim.run([X_0, Y_0], nstepmax = l)
 
 trjs = trj1
-trj1_Sp_theta = my_sim.map(trj1_Sp)
+trj_theta = my_sim.map(trjs)
 
 newPoints = my_sim.findStarting(trj1_Sp_theta, starting_n = N , method = 'QL')
 
