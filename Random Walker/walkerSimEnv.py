@@ -46,16 +46,14 @@ class walkerSimulation:
                 trj_Sp_theta = trj_Sp
                 return trj_Sp_theta
 
-        def reward_state(self, S, theta_mean, theta_std, W_):
+        def cost(self, i, j):
+                if i==j:
+                        cost = 0
 
                 return r_s
 
 
-        def reward_trj(self, trj_Sp_theta, W_):
-
-                return R
-
-        def updateQ(self, i, u):
+        def updateQ(self, i, j, u, cost):
                 # Q format is: (i,u)=(Q_value, k)
                 
                 try:
@@ -86,7 +84,7 @@ class walkerSimulation:
                 if firstFlag:
                         Q_min=0
                 ############################################
-                c = self.cost(i,u)
+                c = cost
                 Q_new = (1-epsilon)*Q_old+epsilon*(c+alpha*Q_min)
                 self.Q[i,u] ={'k':k+1, 'Q':Q_new}
                  
