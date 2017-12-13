@@ -28,6 +28,10 @@ for round in range(700):
 	cost = my_sim.cost(i, j)
 	
 	# update Q function
-	my_sim.updateQ(i, u, cost) # important
+	my_sim.updateQ(i, j, u, cost) # important
+	i = j
 	
+	if finalState:
+		halt
+		
 np.save('trjs', trjs)
