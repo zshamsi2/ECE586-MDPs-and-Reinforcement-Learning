@@ -3,8 +3,7 @@ class walkerSimulation:
 
         ## public
         def __init__(self):
-                self.theta_mean = [0, 0]
-                self.theta_std = [0, 0]
+                self.Q = {}
                 self.r = 1#number of rounds
                 self.s = 1# length of simulations
                 self.N = 1# number of parallel simulations
@@ -56,7 +55,40 @@ class walkerSimulation:
 
                 return R
 
-        def updateW(self, trj_Sp_theta, W_0):
+        def updateQ(self, i, u):
+                # Q format is: (i,u)=(Q_value, k)
+                
+                try:
+                        k = self.Q[i,u]['k']
+                        epsilon_k = 1 # ?!
+                        
+                        # minimization over v
+                        iu = np.array(list(self.Q.keys()))
+                        indexes = np.where(iu==j)
+                        jus = []
+                        firstFlag = True
+                        for ii in range(len(indexes[0])):
+                                if indexes[1][ii]==0:  # if i is equal to j, not u
+                                        i_index = indexes[0][ii] # first index of indexes
+                                        iu_z = iu[i_index]
+                                        #jus.append(iu[i_index])
+                                        Q_val = self.Q[iu_z[0], iu_z[1]]['Q']
+                                        if firstFlag:
+                                                Q_min = Q_val
+                                                firstFlag=Fales
+                                        else:
+                                                if Q_val<Q_min:
+                                                      Q_min = Q_val  
+                        
+                        
+                        
+                        Q_new 
+                        
+                        
+                        self.Q[i,u] ={'k':k+1, 'Q':Q_new}
+                 except:
+                        Q_new = 
+                        self.Q[i,u] ={'k':1, 'Q':Q_new}
                 return W
                 
         def findStarting(self, trj_Sp_theta, trj_Sp, W_1, starting_n=10 , method = 'RL'):
