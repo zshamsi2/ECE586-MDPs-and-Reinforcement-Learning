@@ -13,7 +13,8 @@ class walkerSimulation:
         def updateState(self, trj): ## Need Change
                 # map coordinate space to reaction coorinates space
                 import numpy as np
-                for i in range(trj[0]):
+                s = []
+                for i in range(len(trj[0])):
                         x = trj[0][i]
                         y = trj[1][i]
                         if x>1.5:
@@ -51,10 +52,54 @@ class walkerSimulation:
                                 elif y<1.5:
                                         s.append(11)                                        
                                 else:
-                                        s.append(16)                
+                                        s.append(16)  
                                         
+                s = np.unique(s)
+                firstFlag = True
                         
-                return trj_Sp_theta
+                for i in s:
+                        if firstFlag:
+                                s_1=str(i)
+                                firstFlag = False
+                        else:
+                                s_1=s_1+'0'+str(i)
+                return s_1
+        
+        def findU(j, k, method='QL'):
+                import numpy as np
+                P_k = 90/(100+k)
+                random = np.random.random()
+                if random<P_k: # minimize Q function
+                                ###################### minimization over v
+                                iu = np.array(list(self.Q.keys()))
+                                indexes = np.where(iu==j)
+                                jus = []
+                                firstFlag = True
+                                for ii in range(len(indexes[0])):
+                                        if indexes[1][ii]==0:  # if i is equal to j, not u
+                                                i_index = indexes[0][ii] # first index of indexes
+                                                iu_z = iu[i_index]
+                                                #jus.append(iu[i_index])
+                                                Q_val = self.Q[iu_z[0], iu_z[1]]['Q']
+                                                if firstFlag:
+                                                        Q_min = Q_val
+                                                        u_min = iu_z[1]
+                                                        firstFlag=Fales
+                                                else:
+                                                        if Q_val<Q_min:
+                                                                Q_min = Q_val
+                                                                u_min = iu_z[1]
+                                if firstFlag:
+                                        Q_min=0
+                                        u = np.random.choice([1, 2, 3, 4])
+                        
+                else:
+                        u = np.random.choice([1, 2, 3, 4])
+                        #u = np.random.choice(['u','d','r','l'])
+                return u
+                
+                
+                
         def isFinal(trjs):
                 import numpy as np
                 if np.any(trjs[1]>1.5):
@@ -92,7 +137,7 @@ class walkerSimulation:
                                 if firstFlag:
                                         Q_min = Q_val
                                         firstFlag=Fales
-                                 else:
+                                else:
                                         if Q_val<Q_min:
                                                 Q_min = Q_val
                 if firstFlag:
@@ -150,8 +195,8 @@ class walkerSimulation:
                 for j in range(1,5):
                         V1 =  V1 + AA[j]*np.exp(aa[j]*np.square(xx-XX[j]) + bb[j]*(xx-XX[j])*(yy-YY[j]) + cc[j]*np.square(yy-YY[j]))
                 ##### Main loop
-                trj_x = []
-                trj_y = []
+                trj_x = [inits[0][0]]
+                trj_y = [inits[1][0]]
                 for nstep in range(int(nstepmax)):
                         # calculation of the x and y-components of the force, dVx and dVy respectively
                         ee = AA[0]*np.exp(aa[0]*np.square(x-XX[0])+bb[0]*(x-XX[0])*(y-YY[0])+cc[0]*np.square(y-YY[0]))
@@ -165,8 +210,8 @@ class walkerSimulation:
                         y0 = y
                         x = x - h*dVx + np.sqrt(h*mu)*np.random.randn(1,n1)
                         y = y - h*dVy + np.sqrt(h*mu)*np.random.randn(1,n1)
-                        trj_x.append(x) 
-                        trj_y.append(y)
+                        trj_x.append(x[0][0]) 
+                        trj_y.append(y[0][0])
                 return trj_x, trj_y    
 
         def run_Plt(self, inits, nstepmax = 10):
