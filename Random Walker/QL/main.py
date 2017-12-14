@@ -44,7 +44,7 @@ for epoc in range(5):
 			break
 	totalTimes.append(totalTime)
 	totalCosts.append(totalCost)
-	my_sim.pltFinalPoints(trjs, epoc)
+	#my_sim.pltFinalPoints(trjs, epoc)
 
 	
 pickle.dump(my_sim.Q, open('Q','wb'))
