@@ -65,9 +65,9 @@ class walkerSimulation:
                                 s_1=s_1+'0'+str(i)
                 return s_1
         
-        def findU(j, k, method='QL'):
+        def findU(self, j, k, method='QL'):
                 import numpy as np
-                P_k = 90/(100+k)
+                P_k = 90/(100+float(k))
                 random = np.random.random()
                 if random<P_k: # minimize Q function
                                 ###################### minimization over v
@@ -80,7 +80,7 @@ class walkerSimulation:
                                                 i_index = indexes[0][ii] # first index of indexes
                                                 iu_z = iu[i_index]
                                                 #jus.append(iu[i_index])
-                                                Q_val = self.Q[iu_z[0], iu_z[1]]['Q']
+                                                Q_val = self.Q[int(iu_z[0]), int(iu_z[1])]['Q']
                                                 if firstFlag:
                                                         Q_min = Q_val
                                                         u_min = iu_z[1]
@@ -114,6 +114,9 @@ class walkerSimulation:
                 return cost
 
         def updateQ(self, i, j, u, cost):
+                import numpy as np
+                i = int(i)
+                u = int(u)
                 # Q format is: (i,u)=(Q_value, k)
                 try:
                         k = self.Q[i,u]['k']
@@ -122,6 +125,7 @@ class walkerSimulation:
                         k = 0
                         Q_old = 0
                 epsilon_k = 90./(100+k)
+                alpha = 1
                 
                 ###################### minimization over v
                 iu = np.array(list(self.Q.keys()))
@@ -144,15 +148,21 @@ class walkerSimulation:
                         Q_min=0
                 ############################################
                 c = cost
-                Q_new = (1-epsilon)*Q_old+epsilon*(c+alpha*Q_min)
-                self.Q[i,u] ={'k':k+1, 'Q':Q_new}
-                 
-                Q_old = 0
-                Q_new = (1-epsilon)*Q_old+epsilon*(c+alpha*Q_min)
+                Q_new = (1-epsilon_k)*Q_old+epsilon_k*(c+alpha*Q_min)
                 self.Q[i,u] ={'k':1, 'Q':Q_new}
                 return 
                 
-        def findStarting(self, trj_Sp_theta, trj_Sp, W_1, starting_n=10 , method = 'RL'):
+        def findStarting(self, trjs, u , method='QL'):
+                import numpy as np
+                if u==1: # move up (pick up point as starting point)
+                        index = np.argmax(trjs[1])
+                elif u==2: # move down (pick down point as starting point)
+                        index = np.argmin(trjs[1])
+                elif u==3: # move right (pick right point as starting point)
+                        index = np.argmin(trjs[0])
+                elif u==4: # move lest (pick left point as starting point)
+                        index = np.argmax(trjs[0])        
+                newPoints = [[trjs[0][index]], [trjs[1][index]]]
                 return newPoints
 
         def run(self, inits, nstepmax = 10):
