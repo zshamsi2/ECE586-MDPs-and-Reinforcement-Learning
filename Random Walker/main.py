@@ -7,8 +7,10 @@ l = 100
 
 my_sim = sim.walkerSimulation()
 totalTimes = []
+totalCosts = []
 for epoc in range(5):
 	print('epoc '+str(epoc)+' is running...')
+	totalCost = 0
 	# run first round of simulation
 	X_0 = [1.52]
 	Y_0 = [0.36]
@@ -30,7 +32,7 @@ for epoc in range(5):
 		
 		# calculate imidiate cost
 		cost = my_sim.cost(i, j)
-		
+		totalCost = totalCost+cost
 		# update Q function
 		my_sim.updateQ(i, j, u, cost) # important
 		i = j
@@ -41,9 +43,11 @@ for epoc in range(5):
 			print('The simulation reached the final point in '+str(totalTime)+' steps')
 			break
 	totalTimes.append(totalTime)
+	totalCosts.append(totalCost)
 	my_sim.pltFinalPoints(trjs, epoc)
 
 	
 pickle.dump(my_sim.Q, open('Q','wb'))
 print('Q function learned: ', my_sim.Q)
 np.savetxt('totalTimes', totalTimes)
+np.savetxt('totalCosts', totalCosts)
