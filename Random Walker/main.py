@@ -1,20 +1,23 @@
 import walkerSimEnv as sim
 import numpy as np 
+import pickle
 
+ITERMAX = 10
+l = 100
+
+my_sim = sim.walkerSimulation()
+
+# run first round of simulation
 X_0 = [1.52]
 Y_0 = [0.36]
 
-N = len(X_0) # number of parallel runs 
-l = 10
-# run first round of simulation
-my_sim = sim.walkerSimulation()
-trjs = my_sim.run([X_0, Y_0], nstepmax = l)
+trjs = my_sim.run([X_0, Y_0], nstepmax = l) # 2xl
 i = my_sim.updateState(trjs)
-
-for round in range(700):
+k = 1
+for round in range(50):
 	# find a value for control 
-	u = my_sim.findU(i, method = 'QL')
-	newPoints = my_sim.findStarting(trjs, u, method = 'QL')
+	u = my_sim.findU(i, k)
+	newPoints = my_sim.findStarting(trjs, u)
 
 	trj1 = my_sim.run(newPoints, nstepmax = l) # trj with shape of [[Xs][Ys]]
 	com_trjs = []
@@ -31,7 +34,12 @@ for round in range(700):
 	my_sim.updateQ(i, j, u, cost) # important
 	i = j
 	
-	if my_sim.isFinal(com_trjs):
-		halt
-		
-np.save('trjs', trjs)
+	#if my_sim.isFinal(com_trjs[1]):
+	if  np.any(np.array(com_trjs[1])>1.5): # terminate condition
+		totalTime = l*round
+		print('The simulation reached the final point in '+str(totalTime)+' steps')
+		break
+
+pickle.dump(my_sim.Q, open('Q','wb'))
+print(my_sim.Q)
+
