@@ -100,9 +100,9 @@ class walkerSimulation:
                 
                 
                 
-        def isFinal(trjs):
+        def isFinal(trjs_y):
                 import numpy as np
-                if np.any(trjs[1]>1.5):
+                if np.any(trjs_y>1.5):
                         return True
                 return False
 
@@ -120,7 +120,7 @@ class walkerSimulation:
                 # Q format is: (i,u)=(Q_value, k)
                 try:
                         k = self.Q[i,u]['k']
-                        Q_old = self.Q[i,u]
+                        Q_old = self.Q[i,u]['Q']
                 except:
                         k = 0
                         Q_old = 0
