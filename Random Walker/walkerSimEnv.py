@@ -68,6 +68,8 @@ class walkerSimulation:
         def findU(self, j, k, method='QL'):
                 import numpy as np
                 P_k = 90/(100+float(k))
+                P_k = 90/(100+float(k))
+                P_k = 0.95
                 random = np.random.random()
                 if random<P_k: # minimize Q function
                                 ###################### minimization over v
@@ -125,6 +127,7 @@ class walkerSimulation:
                         k = 0
                         Q_old = 0
                 epsilon_k = 90./(100+k)
+                epsilon_k = 90./(100+k)
                 alpha = 1
                 
                 ###################### minimization over v
@@ -148,8 +151,12 @@ class walkerSimulation:
                         Q_min=0
                 ############################################
                 c = cost
-                Q_new = (1-epsilon_k)*Q_old+epsilon_k*(c+alpha*Q_min)
-                self.Q[i,u] ={'k':1, 'Q':Q_new}
+                if k==0:
+                        Q_new = (c+alpha*Q_min)
+                        self.Q[i,u] ={'k':1, 'Q':Q_new}
+                else:
+                        Q_new = (1-epsilon_k)*Q_old+epsilon_k*(c+alpha*Q_min)
+                        self.Q[i,u] ={'k':k+1, 'Q':Q_new}
                 return 
                 
         def findStarting(self, trjs, u , method='QL'):
