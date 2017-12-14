@@ -41,6 +41,8 @@ for epoc in range(5):
 			print('The simulation reached the final point in '+str(totalTime)+' steps')
 			break
 	totalTimes.append(totalTime)
+	my_sim.pltFinalPoints(trjs, epoc)
+
 	
 pickle.dump(my_sim.Q, open('Q','wb'))
 print('Q function learned: ', my_sim.Q)
